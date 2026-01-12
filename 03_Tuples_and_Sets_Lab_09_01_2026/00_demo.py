@@ -34,3 +34,12 @@
 #     avg = sum(grades) / len(grades)
 #     print(f"{name} -> {' '.join([str(x) for x in grades])} (avg: {avg})")
 
+#--------------------SETS--------------------------------------
+#-------------------methods-----------------------------------
+a = {1, 2, 3, 4}
+b = {3, 4, 5, 6}
+print(a | b) # union
+print(a.union(b))
+
+print(a & b)
+print(a.intersection(b))
