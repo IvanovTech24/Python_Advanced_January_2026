@@ -9,7 +9,6 @@ for robot in robots_input:
     robot_name, process_time = current_robot[0], int(current_robot[1])
     robots_dictionary[robot_name] = [process_time, 0]
 
-
 starting_time = datetime.strptime(input(), "%H:%M:%S")
 
 products = deque()
