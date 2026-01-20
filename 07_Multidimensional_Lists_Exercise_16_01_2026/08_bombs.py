@@ -1,8 +1,12 @@
-def explosion(curr_matrix, curr_cells, curr_row, curr_col, curr_bomb ):
+def explosion(curr_matrix: list[list[int]],
+              curr_cells: tuple[tuple[int, int], ...],
+              curr_row: int, curr_col: int, curr_bomb_value: int) -> None:
     for cell in curr_cells:
-        if 0 <= curr_row + cell[0] < rows and 0 <= curr_col + cell[1] < rows:
-            if curr_matrix[curr_row + cell[0]][curr_col + cell[1]] > 0:
-                curr_matrix[curr_row + cell[0]][curr_col + cell[1]] -= curr_bomb
+        new_row = curr_row + cell[0]
+        new_col = curr_col + cell[1]
+        if 0 <= new_row < rows and 0 <= new_col < rows:
+            if curr_matrix[new_row][new_col] > 0:
+                curr_matrix[new_row][new_col] -= curr_bomb_value
 
 
 rows = int(input())
@@ -27,11 +31,11 @@ cells = (
 )
 
 for coordinate in curr_coordinates:
-    if matrix[coordinate[0]][coordinate[1]] <= 0: # validation for dead cells
+    if matrix[coordinate[0]][coordinate[1]] <= 0: # exploded bomb validation
         continue
-    bomb = matrix[coordinate[0]][coordinate[1]]
+    bomb_value = matrix[coordinate[0]][coordinate[1]]
     matrix[coordinate[0]][coordinate[1]] = 0
-    explosion(matrix, cells, coordinate[0], coordinate[1], bomb)
+    explosion(matrix, cells, coordinate[0], coordinate[1], bomb_value)
 
 alive_cells, sum_alive_cells = 0, 0
 for nested_list in matrix:
