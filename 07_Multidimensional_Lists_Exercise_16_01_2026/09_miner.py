@@ -1,18 +1,18 @@
 from collections import deque
 
-def find_miner_and_coal(curr_mat: list[list[str]]):
+def find_miner_and_coal(curr_matrix: list[list[str]]) -> tuple[tuple[int, int], int]:
     curr_miner = ()
     curr_coal = 0
 
     for curr_row in range(size_field):
         for curr_col in range(size_field):
-            if curr_mat[curr_row][curr_col] == "s":
+            if curr_matrix[curr_row][curr_col] == "s":
                 curr_miner = (curr_row, curr_col)
-            elif curr_mat[curr_row][curr_col] == "c":
+            elif curr_matrix[curr_row][curr_col] == "c":
                 curr_coal += 1
     return curr_miner, curr_coal
 
-def is_valid_position(c_row, c_col):
+def is_valid_position(c_row: int, c_col: int) -> bool:
     return 0 <= c_row < size_field and 0 <= c_col < size_field
 
 size_field = int(input())
@@ -26,33 +26,33 @@ directions = {
     "right": (0, +1)
 }
 
-miner, coal = find_miner_and_coal(matrix)
-printed_result = False
+miner_position, total_coal = find_miner_and_coal(matrix)
+game_result = False
 
 while commands:
     command = commands.popleft()
-    row, col = miner[0] + directions[command][0], miner[1] + directions[command][1]
+    row, col = miner_position[0] + directions[command][0], miner_position[1] + directions[command][1]
 
     if not is_valid_position(row, col):
         continue
 
     if matrix[row][col] == "e":
         print(f"Game over! ({row}, {col})")
-        printed_result = True
+        game_result = True
         break
 
     if matrix[row][col] == "c":
-        coal -= 1
+        total_coal -= 1
 
-    old_row, old_col = miner
+    old_row, old_col = miner_position
     matrix[old_row][old_col] = "*"
     matrix[row][col] = "s"
-    miner = (row, col)
+    miner_position = (row, col)
 
-    if coal == 0:
+    if total_coal == 0:
         print(f"You collected all coal! ({row}, {col})")
-        printed_result = True
+        game_result = True
         break
 
-if not commands and not printed_result:
-    print(f"{coal} pieces of coal left. ({miner[0]}, {miner[1]})")
+if not commands and not game_result:
+    print(f"{total_coal} pieces of coal left. ({miner_position[0]}, {miner_position[1]})")
