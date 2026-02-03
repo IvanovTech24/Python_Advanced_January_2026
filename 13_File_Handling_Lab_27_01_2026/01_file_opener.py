@@ -1,6 +1,6 @@
 import os
 
-from consts import path_to_dir
+from constants import path_to_dir
 
 path = os.path.join(path_to_dir, "files", "text.txt")
 
