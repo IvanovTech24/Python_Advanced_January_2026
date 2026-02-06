@@ -1,7 +1,7 @@
 from string import punctuation
 
 
-with open("text.txt") as file, open("output.txt", "w") as output_file:
+with open("../text.txt") as file, open("../output.txt", "w") as output_file:
     result = []
     for row_index, line in enumerate(file, 1):
         letter_count = 0
