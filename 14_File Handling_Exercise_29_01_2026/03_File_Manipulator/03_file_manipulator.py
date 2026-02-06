@@ -1,5 +1,6 @@
 import os
 
+
 while True:
     line = input()
     if line == "End":
