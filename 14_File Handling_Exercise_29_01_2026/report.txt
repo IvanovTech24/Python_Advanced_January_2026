@@ -1,0 +1,15 @@
+.html
+- - - test.html
+.js
+- - - test.js
+.py
+- - - 01_even_lines.py
+- - - 02_line_numbers.py
+- - - 03_file_manipulator.py
+- - - 04_directory_traversal.py
+- - - 04_directory_traversal_recursive.py
+.txt
+- - - output.txt
+- - - report.txt
+- - - test.txt
+- - - text.txt
