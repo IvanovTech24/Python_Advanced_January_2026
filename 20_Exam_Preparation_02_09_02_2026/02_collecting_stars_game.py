@@ -1,4 +1,4 @@
-def move_player(direction, r, c):
+def move_player(direction: str, r: int, c: int, curr_n: int) -> tuple[int, int]:
     moves = {
         "up": (-1, 0),
         "down": (1, 0),
@@ -8,7 +8,7 @@ def move_player(direction, r, c):
     row_change, col_change = moves.get(direction, (0, 0))
     new_row, new_col = (r + row_change), (c + col_change)
 
-    if new_row < 0 or new_row >= n  and new_col < 0 or new_col >= n:
+    if (new_row < 0 or new_row >= curr_n)  or (new_col < 0 or new_col >= curr_n):
         return 0, 0
 
     return new_row, new_col
@@ -29,7 +29,7 @@ for row in range(n):
 
 while True:
     command = input()
-    new_player_row, new_player_col = move_player(command, player_row, player_col)
+    new_player_row, new_player_col = move_player(command, player_row, player_col, n)
 
 
     if matrix[new_player_row][new_player_col] == "*":
