@@ -1,76 +1,74 @@
-def move_counter_terrorist(curr_command, r, c, mat_row, mat_col):
-    if  not (0 <= r < mat_row and 0 <= c < mat_col):
-        return r, c
+directions = {
+    "up": (-1, 0),
+    "down": (1, 0),
+    "left": (0, -1),
+    "right": (0, 1)
+}
 
-    moves = {
-        "up": (-1, 0),
-        "down": (+1, 0),
-        "left": (0, -1),
-        "right": (0, +1)
-    }
 
-    row_change, col_change = moves.get(curr_command, (0, 0))
-    curr_r, curr_c = (r + row_change), (c + col_change)
-    return curr_r, curr_c
-
-input_row, input_col = [int(x) for x in  input().split(", ")]
-
-count_terr_row, count_terr_col = 0, 0
+n, m = map(int, input().split(", "))
 matrix = []
-for row in range(input_row):
-    matrix.append(list(input()))
-    for col in range(input_col):
-        if matrix[row][col] == "C":
-            count_terr_row, count_terr_col = row, col
-            matrix[row][col] = "*"
-
 time_to_defuse = 16
+counter_terrorist = ()
+terrorists = set()
+bomb = ()
+on_bomb = False
 
-command = input()
+for row in range(n):
+    matrix.append(list(input()))
+    for col in range(m):
+        if matrix[row][col] == "C":
+            counter_terrorist = (row, col)
+        elif matrix[row][col] == "T":
+            terrorists.add((row, col))
+        elif matrix[row][col] == "B":
+            bomb = (row, col)
+
 while True:
-    if command != "defuse":
-        time_to_defuse -= 1
-        new_row, new_col = move_counter_terrorist(command, count_terr_row, count_terr_col, input_row, input_col)
-
-        if matrix[new_row][new_col] == "B":
-            if time_to_defuse >= 1:
-                command = input()
-                if command == "defuse":
-                    if time_to_defuse >= 4:
-                        print("Counter-terrorist wins!")
-                        print(f"Bomb has been defused: {time_to_defuse} second/s remaining.")
-                        break
-                    else:
-                        continue
-        elif matrix[new_row][new_col] == "T":
-            matrix[new_row][new_col] = "*"
-            print("Terrorists win!")
-            break
-    elif command == "defuse":
-        if matrix[count_terr_row][count_terr_col] != "B":
-            time_to_defuse -= 2
-            continue
-        elif matrix[count_terr_row][count_terr_col] == "B":
-            if time_to_defuse >= 4:
-                time_to_defuse -= 4
-                matrix[count_terr_row][count_terr_col] = "D"
-                print("Counter-terrorist wins!")
-                print(f"Bomb has been defused: {time_to_defuse} second/s remaining.")
-                break
-            else:
-                needed_time = 4 - time_to_defuse
-                matrix[count_terr_row][count_terr_col] = "X"
-                print("Terrorists win!")
-                print("Bomb was not defused successfully!")
-                print(f"Time needed: {needed_time} second/s.")
-                break
-
-
-
-
-    count_terr_row, count_terr_col = new_row, new_col
     command = input()
+    if command in directions.keys():
+        time_to_defuse -= 1
+        row, col = counter_terrorist
+        row_change, col_change = directions[command]
+        new_row, new_col = row + row_change, col + col_change
+        if 0 <= new_row < n and 0 <= new_col < m:
+            counter_terrorist = (new_row, new_col)
+            if (new_row, new_col) == bomb:
+                on_bomb = True
+                continue
+            elif (new_row, new_col) in terrorists:
+                matrix[new_row][new_col] = "*"
+                counter_terrorist = None
+                break
+            on_bomb = False
+    elif command == "defuse" and on_bomb:
+        time_to_defuse -= 4
+        bomb_row, bomb_col = bomb
+        if time_to_defuse >= 0:
+            matrix[bomb_row][bomb_col] = "D"
+            bomb = None
+        else:
+            matrix[bomb_row][bomb_col] = "X"
+            counter_terrorist = None
+            bomb = None
+        break
+    elif command == "defuse" and not on_bomb:
+        time_to_defuse -= 2
 
-matrix[count_terr_row][count_terr_col] = "C"
+    if time_to_defuse <= 0:
+        bomb = None
+        counter_terrorist = None
+        break
+
+if not bomb and not counter_terrorist:
+    print("Terrorists win!")
+    print("Bomb was not defused successfully!")
+    print(f"Time needed: {abs(time_to_defuse)} second/s.")
+elif not bomb and counter_terrorist:
+    print("Counter-terrorist wins!")
+    print(f"Bomb has been defused: {time_to_defuse} second/s remaining.")
+elif bomb and not counter_terrorist:
+    print("Terrorists win!")
+
 for row in matrix:
     print("".join(row))
