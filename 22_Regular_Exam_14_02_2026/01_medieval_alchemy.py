@@ -8,7 +8,6 @@ potion_names = [
     ("Elixir of Strength", 70)
 ]
 
-
 substances = [int(x) for x in input().split(", ")]
 crystals = deque(int(x) for x in input().split(", "))
 
@@ -21,19 +20,23 @@ while substances and crystals:
 
     substance = substances.pop()
     crystal = crystals.popleft()
-    current_sum = substance + crystal
+    current_sum_potion = substance + crystal
 
-    found = False
+    is_founded_potion = False
     for name, energy in potion_names:
-        if energy == current_sum and name not in crafted_potions:
+        if energy == current_sum_potion and name not in crafted_potions:
             crafted_potions.append(name)
-            found = True
+            is_founded_potion = True
             break
 
-    if found:
+    if is_founded_potion:
         continue
 
-    possible = [energy for name, energy in potion_names if energy < current_sum and name not in crafted_potions]
+    possible = [energy for name, energy in potion_names if energy < current_sum_potion and name not in crafted_potions]
+    # possible = []
+    # for name, energy in potion_names:
+    #   if energy < current_sum_potion and name not in crafted_potions:
+    #        possible.append(energy)
 
     if possible:
         best_energy = max(possible)
