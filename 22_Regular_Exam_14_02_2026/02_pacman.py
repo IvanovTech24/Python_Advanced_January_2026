@@ -8,25 +8,19 @@ directions = {
 n = int(input())
 
 matrix = []
-packman_position = ()
+pacman_position = 0, 0
 stars = 0
-ghost_position = set()
 health = 100
-freezer_position = ()
 on_freeze = False
 
 for row in range(n):
     matrix.append(list(input()))
     for col in range(n):
         if matrix[row][col] == "P":
-            packman_position = (row, col)
+            pacman_position = row, col
             matrix[row][col] = "-"
         elif matrix[row][col] == "*":
             stars += 1
-        elif matrix[row][col] == "G":
-            ghost_position.add((row, col))
-        elif matrix[row][col] == "F":
-            freezer_position = (row, col)
 
 
 
@@ -37,10 +31,10 @@ while True:
             print("Pacman failed to collect all the stars.")
         break
 
-    row, col = packman_position
+    row, col = pacman_position
     row_change, col_change = directions[command]
     new_row, new_col = (row_change + row) % n, (col_change + col) % n
-    packman_position = new_row, new_col
+    pacman_position = new_row, new_col
 
     if matrix[new_row][new_col] == "*":
         stars -= 1
@@ -62,8 +56,7 @@ while True:
         print("Pacman wins! All the stars are collected.")
         break
 
-packman_row, packman_col = packman_position
-matrix[packman_row][packman_col] = "P"
+matrix[pacman_position[0]][pacman_position[1]] = "P"
 
 print(f"Health: {health}")
 if stars > 0:
